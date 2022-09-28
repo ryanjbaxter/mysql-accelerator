@@ -52,7 +52,7 @@ engine:
       expression: '#artifactId.toLowerCase()'
   merge:
     - include: [ "**/*" ]
-      exclude: [ "config/workload.yaml", "Tiltfile", "pom.xml" ]
+      exclude: [ "config/workload.yaml", "Tiltfile", "pom.xml", "**/*.java" ]
     - include: [ "config/workload.yaml"]
       chain:
         - type: ReplaceText
@@ -83,3 +83,19 @@ engine:
           substitutions:
             - text: "<groupId>com.example</groupId>"
               with: "'<groupId>' + #groupId + '</groupId>'"
+        - type: ReplaceText
+          substitutions:
+            - text: "<artifactId>spring-boot-mysql-app</artifactId>"
+              with: "'<artifactId>' + #artifactId + '<artifactId>'"
+    - include: [ "**/*.java" ]
+      let:
+        - name: packageDirectory
+          expression: '#packageName.replace(".", "/")'
+      chain:
+        - type: ReplaceText
+          substitutions:
+            - text: "com.example.springbootmysql"
+              with: "#packageName"
+        - type: RewritePath
+          regex: "src/(?<sourceset>.*)/java/(?<currentpackage>.*/)restservicedb(?<untouchedpath>.*)"
+          rewriteTo: "'src/' + #sourceset + '/java/' + #packageDirectory + '/' + #untouchedpath"
