@@ -10,6 +10,22 @@ accelerator:
     - tanzu
 
   options:
+    - name: artifactId
+      inputType: text
+      defaultValue: "spring-boot-mysql-app"
+      label: Module artifact name
+      required: true
+    - name: groupId
+      inputType: text
+      defaultValue: "com.example"
+      label: Module group name
+      required: true
+    - name: packageName
+      inputType: text
+      defaultValue: "com.example.springbootmysql"
+      label: Module root package
+      required: true
+    - name: buildTool
     - name: resourceclaimId
       inputType: text
       label: Name of resource claim for the MySQL service
@@ -30,6 +46,11 @@ accelerator:
 
 engine:
   # onConflict: NWayDiff
+  let:
+    - name: packageDirectory
+      expression: '#packageName.replace(".", "/")'
+    - name: workloadResourceName
+      expression: '#artifactId.toLowerCase()'
   merge:
     - include: [ "**/*" ]
       exclude: [ "config/workload.yaml", "Tiltfile" ]

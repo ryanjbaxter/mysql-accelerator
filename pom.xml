@@ -8,7 +8,7 @@
 		<version>2.7.3</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.example.mysqlapp</groupId>
+	<groupId>com.example</groupId>
 	<artifactId>spring-boot-mysql-app</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Spring MySQL App</name>
