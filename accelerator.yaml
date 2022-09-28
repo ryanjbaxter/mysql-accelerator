@@ -1,0 +1,51 @@
+accelerator:
+  displayName: Spring Boot MySQL App
+  description: A sample Spring Boot app to demonstrate the capabilities of Spring Boot and TAP.
+  tags:
+    - java
+    - spring
+    - web
+    - jpa
+    - mysql
+    - tanzu
+
+  options:
+    - name: resourceclaimId
+      inputType: text
+      label: Name of resource claim for the MySQL service
+      defaultValue: mysql-db
+      required: true
+    - name: sourceImageRepo
+      inputType: text
+      label: Image repo to place the source image for use with Tanzu Live Update
+      defaultValue: my-source-repo.com
+      required: true
+    - name: namespace
+      inputType: text
+      label: Namespace to deploy the application to when using Tanzu Live Update
+      defaultValue: dev-namespace
+      required: true
+  # imports:
+  # - name: tap-workload
+
+engine:
+  # onConflict: NWayDiff
+  merge:
+    - include: [ "**/*" ]
+      exclude: [ "config/workload.yaml", "Tiltfile" ]
+    - include: [ "config/workload.yaml"]
+      chain:
+        - type: ReplaceText
+          substitutions:
+            - text: mysql-db
+              with: "#resourceclaimId"
+    - include: [ "Tiltfile"]
+      chain:
+        - type: ReplaceText
+          substitutions:
+            - text: my-image-repo.com
+              with: "#sourceImageRepo"
+        - type: ReplaceText
+          substitutions:
+            - text: dev-namespace
+              with: "#namespace"

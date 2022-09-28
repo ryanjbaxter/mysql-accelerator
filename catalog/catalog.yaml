@@ -1,0 +1,13 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: spring-boot-mysql-app
+  description: "Spring Boot MySQL App"
+  tags:
+    - tanzu
+  annotations:
+    'backstage.io/kubernetes-label-selector': 'app.kubernetes.io/part-of=spring-boot-mysql-app'
+spec:
+  type: service
+  lifecycle: experimental
+  owner: default-team
