@@ -25,7 +25,6 @@ accelerator:
       defaultValue: "com.example.springbootmysql"
       label: Module root package
       required: true
-    - name: buildTool
     - name: resourceclaimId
       inputType: text
       label: Name of resource claim for the MySQL service
@@ -53,13 +52,17 @@ engine:
       expression: '#artifactId.toLowerCase()'
   merge:
     - include: [ "**/*" ]
-      exclude: [ "config/workload.yaml", "Tiltfile" ]
+      exclude: [ "config/workload.yaml", "Tiltfile", "pom.xml" ]
     - include: [ "config/workload.yaml"]
       chain:
         - type: ReplaceText
           substitutions:
             - text: mysql-db
               with: "#resourceclaimId"
+        - type: ReplaceText
+          substitutions:
+              - text: "spring-boot-mysql-app"
+                with: "#workloadResourceName"
     - include: [ "Tiltfile"]
       chain:
         - type: ReplaceText
@@ -70,3 +73,9 @@ engine:
           substitutions:
             - text: dev-namespace
               with: "#namespace"
+    - include: [ "pom.xml" ]
+      chain:
+        - type: ReplaceText
+          substitutions:
+            - text: "<groupId>com.example</groupId>"
+              with: "'<groupId>' + #groupId + '</groupId>'"
