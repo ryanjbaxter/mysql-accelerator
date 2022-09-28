@@ -67,12 +67,16 @@ engine:
       chain:
         - type: ReplaceText
           substitutions:
-            - text: my-image-repo.com
+            - text: my-source-repo.com
               with: "#sourceImageRepo"
         - type: ReplaceText
           substitutions:
             - text: dev-namespace
               with: "#namespace"
+        - type: ReplaceText
+          substitutions:
+            - text: "spring-boot-mysql-app"
+              with: "#workloadResourceName"
     - include: [ "pom.xml" ]
       chain:
         - type: ReplaceText
